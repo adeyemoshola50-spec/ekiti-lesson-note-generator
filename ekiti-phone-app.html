@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06281a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Ekiti Lesson Notes</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: #f2f5f2; color: #13251c;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+}
+:root {
+  --green-900:#06281a; --green-800:#0b3d28; --green-700:#12563a; --green-600:#1a6b49;
+  --gold:#c9a227; --gold-2:#e8c877; --line:#dfe6e1; --muted:#5d6f64; --ink:#13251c;
+  --paper:#fff;
+}
+
+/* header */
+.head {
+  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; background: var(--green-900); color: #fff;
+  padding-top: calc(12px + env(safe-area-inset-top));
+}
+.head .brand { display: flex; align-items: center; gap: 10px; }
+.head .mark { width: 34px; height: 34px; border-radius: 9px; background: rgba(255,255,255,.1); display: grid; place-items: center; border: 1px solid rgba(232,200,119,.35); }
+.head strong { font-size: .98rem; letter-spacing: -.01em; display: block; }
+.head small { font-size: .6rem; letter-spacing: .14em; opacity: .7; display: block; }
+.head--back { display: flex; align-items: center; gap: 12px; }
+.head--back .back {
+  display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18); color: #fff; padding: 7px 13px; border-radius: 9px;
+  font-size: .84rem; font-weight: 600; font-family: inherit;
+}
+.head--back strong { font-size: .95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trunc { max-width: 60vw; }
+
+/* layout */
+.pad { padding: 18px 16px calc(34px + env(safe-area-inset-bottom)); }
+.welcome { margin-bottom: 16px; }
+.eyebrow { font-size: .62rem; letter-spacing: .15em; font-weight: 800; color: var(--green-600); margin-bottom: 8px; }
+.welcome h1 { font-size: 1.42rem; line-height: 1.2; margin: 0 0 8px; letter-spacing: -.02em; }
+.welcome p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+.notice {
+  border-radius: 11px; padding: 12px 14px; font-size: .82rem; line-height: 1.55; margin: 0 0 16px;
+  background: #fdf8ea; border: 1px solid #ecdcae; color: #6b5417;
+}
+.notice strong { display: block; margin-bottom: 3px; }
+.notice--blue { background: #eff6fb; border-color: #cfe3f0; color: #1c4c66; }
+.notice--gold { background: #fdf8ea; border-color: #ecdcae; color: #6b5417; }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit; font-size: .95rem; font-weight: 700; border-radius: 11px;
+  padding: 13px 20px; border: 1px solid transparent; cursor: pointer; width: 100%;
+}
+.btn--primary { background: var(--green-800); color: #fff; box-shadow: 0 6px 16px -8px rgba(11,61,40,.7); }
+.btn--primary:active { background: var(--green-900); }
+.btn--lg { padding: 15px 22px; font-size: 1rem; margin-bottom: 18px; }
+.btn--ghost { background: #fff; border-color: var(--line); color: var(--green-800); }
+.btn--danger-ghost { background: #fff; border-color: #eccfcf; color: #9c2b2b; }
+
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 22px; }
+.stat { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 10px; text-align: center; }
+.sv { display: block; font-size: 1.5rem; font-weight: 700; color: var(--green-800); line-height: 1.1; }
+.sl { display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-top: 3px; }
+
+.sec-title { font-size: .72rem; text-transform: uppercase; letter-spacing: .11em; color: var(--muted); margin: 0 0 10px; font-weight: 800; }
+.empty { background: #fff; border: 1px dashed var(--line); border-radius: 12px; padding: 22px 18px; text-align: center; color: var(--muted); font-size: .87rem; }
+
+.list { display: flex; flex-direction: column; gap: 9px; }
+.row-item { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px; }
+.ri-main { flex: 1; min-width: 0; }
+.ri-title { font-weight: 700; font-size: .93rem; color: var(--ink); margin-bottom: 2px; }
+.ri-sub { font-size: .76rem; color: var(--muted); }
+.ri-del { background: none; border: 0; padding: 8px; color: #b04a4a; flex: 0 0 auto; }
+
+/* form */
+.field { display: block; margin-bottom: 14px; }
+.fl { display: block; font-size: .78rem; font-weight: 700; color: #33463a; margin-bottom: 6px; letter-spacing: .01em; }
+input, select, textarea {
+  width: 100%; font-family: inherit; font-size: 1rem; color: var(--ink);
+  background: #fff; border: 1px solid #cedad3; border-radius: 10px; padding: 12px 13px;
+  appearance: none; -webkit-appearance: none;
+}
+select { background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235d6f64' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 13px center; padding-right: 34px; }
+textarea { line-height: 1.5; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--green-600); box-shadow: 0 0 0 3px rgba(26,107,73,.13); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+.hint { display: block; font-size: .72rem; color: var(--muted); margin-top: 5px; }
+.tiny { font-size: .74rem; } .muted { color: var(--muted); } .center { text-align: center; }
+
+.chips { display: flex; flex-direction: column; gap: 7px; margin-bottom: 16px; }
+.chip {
+  display: flex; align-items: center; gap: 9px; text-align: left; width: 100%;
+  background: #fff; border: 1px solid var(--line); border-radius: 10px;
+  padding: 10px 12px; font-family: inherit; font-size: .86rem; color: var(--ink); cursor: pointer;
+}
+.chip--on { border-color: var(--green-600); background: #f2f8f4; font-weight: 600; }
+.wk { font-size: .66rem; font-weight: 800; letter-spacing: .04em; color: var(--green-600); background: #eaf3ed; border-radius: 5px; padding: 2px 6px; flex: 0 0 auto; }
+
+/* action bar */
+.actionbar {
+  position: sticky; top: 58px; z-index: 15; display: flex; gap: 6px;
+  padding: 9px 12px; background: #fff; border-bottom: 1px solid var(--line);
+}
+.ab {
+  flex: 1; display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: 0; font-family: inherit; font-size: .66rem; font-weight: 700;
+  color: var(--green-800); padding: 7px 2px; border-radius: 9px; letter-spacing: .02em;
+}
+.ab--on { background: #eef6f0; }
+.ab:active { background: #eef6f0; }
+
+/* note paper */
+.draftflag { background: #fdf8ea; border: 1px solid #ecdcae; color: #6b5417; border-radius: 9px; padding: 10px 12px; font-size: .76rem; line-height: 1.5; margin-bottom: 12px; }
+.paper { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 18px 15px 22px; box-shadow: 0 10px 26px -20px rgba(6,40,26,.4); }
+.letterhead { text-align: center; font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--green-900); line-height: 1.25; }
+.lh-sub { text-align: center; font-size: .6rem; letter-spacing: .3em; color: var(--green-600); margin: 5px 0 12px; }
+.metagrid { border: 1px solid #cdd9d2; border-radius: 7px; overflow: hidden; margin-bottom: 6px; }
+.mg { display: flex; border-bottom: 1px solid #e4ebe6; font-size: .78rem; }
+.mg:last-child { border-bottom: 0; }
+.mgk { flex: 0 0 34%; padding: 6px 9px; background: #f6f9f7; font-weight: 700; font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.mgv { padding: 6px 9px; font-weight: 600; }
+
+.sec { border-top: 1px solid #eef2ef; padding: 13px 0 3px; }
+.sec:first-of-type { border-top: 0; }
+.sec-h { display: flex; align-items: center; gap: 7px; font-size: .7rem; letter-spacing: .09em; font-weight: 800; color: var(--green-700); margin: 0 0 7px; }
+.sec-b { font-size: .88rem; line-height: 1.65; }
+.sec-b .blk { margin-bottom: 9px; }
+.sec-b .blk:last-child { margin-bottom: 0; }
+.sec-b .li { display: block; padding-left: 9px; text-indent: -9px; margin-bottom: 3px; }
+.tag { font-style: normal; font-size: .55rem; letter-spacing: .09em; background: #fdf3d8; color: #8a6a12; border: 1px solid #eddfae; border-radius: 4px; padding: 1px 5px; }
+.ol { margin: 0; padding-left: 1.25em; }
+.ol li { margin-bottom: 4px; }
+.emptysec { color: #9aa8a0; font-style: italic; font-size: .82rem; margin: 0; }
+
+.steps { display: flex; flex-direction: column; gap: 9px; }
+.step { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.step-h { display: flex; align-items: center; gap: 8px; background: #f4f8f5; padding: 8px 10px; }
+.step-n { width: 20px; height: 20px; border-radius: 6px; background: var(--green-800); color: #fff; display: grid; place-items: center; font-size: .67rem; font-weight: 800; flex: 0 0 auto; }
+.step-t { font-size: .8rem; font-weight: 700; line-height: 1.3; flex: 1; }
+.step-time { font-size: .64rem; font-weight: 700; color: var(--green-600); background: #e6f0e9; border-radius: 5px; padding: 2px 6px; flex: 0 0 auto; }
+.step-b { padding: 8px 11px; border-top: 1px dashed #e8eeea; font-size: .84rem; line-height: 1.6; }
+.step-b .lbl { font-size: .57rem; font-weight: 800; letter-spacing: .1em; color: var(--green-700); margin-bottom: 3px; }
+
+.qas { display: flex; flex-direction: column; gap: 9px; }
+.qa .q { font-size: .87rem; }
+.qa .a { font-size: .82rem; color: #3d5a49; background: #f6f9f7; border-left: 2px solid var(--green-600); border-radius: 0 7px 7px 0; padding: 6px 9px; margin-top: 4px; }
+
+.foot { margin-top: 18px; padding-top: 9px; border-top: 1px solid #eef2ef; font-size: .64rem; color: #93a29a; line-height: 1.5; }
+.bottom-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 15px; }
+
+/* edit */
+.edsec { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 13px 13px 15px; margin-bottom: 11px; }
+.edsec-h { font-size: .68rem; font-weight: 800; letter-spacing: .09em; color: var(--green-700); margin-bottom: 9px; }
+.edsec input, .edsec textarea { font-size: .9rem; padding: 9px 11px; margin-bottom: 7px; }
+.edsec textarea { margin-bottom: 0; }
+.edstep { border: 1px dashed #d6e0da; border-radius: 9px; padding: 10px; margin-bottom: 9px; background: #fbfdfb; }
+.edstep-h { font-size: .62rem; font-weight: 800; letter-spacing: .09em; color: var(--muted); margin-bottom: 6px; }
+
+/* toast */
+.toast {
+  position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px);
+  background: #0b3d28; color: #fff; font-size: .84rem; font-weight: 600;
+  padding: 11px 18px; border-radius: 10px; opacity: 0; pointer-events: none;
+  transition: opacity .18s, transform .18s; z-index: 100; box-shadow: 0 10px 24px -10px rgba(0,0,0,.5); max-width: 88vw; text-align: center;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* print */
+@media print {
+  body { background: #fff; font-size: 10.5pt; }
+  .head, .actionbar, .bottom-actions, .draftflag, #toast { display: none !important; }
+  .pad { padding: 0; }
+  .paper { border: 0; box-shadow: none; border-radius: 0; padding: 0; }
+  .sec { break-inside: avoid-page; }
+  .step, .qa { break-inside: avoid; }
+  .foot { border-top: 1px solid #ccc; }
+}
+@media (min-width: 620px) {
+  .pad { max-width: 720px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+  .head { padding-left: 24px; padding-right: 24px; }
+}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+<script>
+/* Shared lesson-note engine for the standalone offline app. */
+(function (root) {
+  'use strict';
+
+  var CURR = {"CLASSES":{"Primary":["Primary 1","Primary 2","Primary 3","Primary 4","Primary 5","Primary 6"],"JSS":["JSS 1","JSS 2","JSS 3"],"SSS":["SSS 1","SSS 2","SSS 3"]},"SUBJECTS":{"Primary":["English Studies","Mathematics","Basic Science and Technology","National Values Education (Social Studies)","National Values Education (Civic Education)","Cultural and Creative Arts","Nigerian Language","Christian Religious Studies","Islamic Religious Studies","Pre-Vocational Studies (Home Economics)","Pre-Vocational Studies (Agricultural Science)","Computer Studies (ICT)"],"JSS":["English Studies","Mathematics","Basic Science","Basic Technology","Business Studies","Social Studies","Civic Education","Agricultural Science","Home Economics","Computer Studies (ICT)","Christian Religious Studies","Islamic Religious Studies","Nigerian Language","Cultural and Creative Arts","French","Physical and Health Education"],"SSS":["English Language","Mathematics","Biology","Chemistry","Physics","Further Mathematics","Agricultural Science","Economics","Government","Financial Accounting","Commerce","Literature in English","Christian Religious Studies","Islamic Religious Studies","History","Geography","Civic Education","Computer Science","Technical Drawing","Food and Nutrition","Yoruba","French","Physical and Health Education"]},"TOPIC_BANK":{"Mathematics":{"JSS 1":["Whole Numbers","Fractions, Decimals and Percentages","Approximation and Estimation","Number Bases","Algebraic Processes","Simple Equations","Plane Shapes","Three-Dimensional Figures","Statistics: Collection and Presentation","Perimeter and Area","Volume of Solids","Angles and Polygons"],"JSS 2":["Whole Numbers and Number Bases","Approximation","Algebraic Expressions","Simple Equations","Linear Inequalities","Plane Figures","Similar Shapes","Trigonometric Ratios","Statistics","Graphs","Angle of a Polygon","Area and Volume"],"JSS 3":["Number Bases and Standard Form","Rational and Irrational Numbers","Approximation and Percentage Error","Simple and Compound Interest","Equations and Inequalities","Simultaneous Linear Equations","Geometry: Circle","Area and Volume","Statistics and Probability","Trigonometric Ratios","Bearings","Measures of Central Tendency"],"SSS 1":["Number Bases","Indices and Logarithms","Surds","Quadratic Equations","Logical Reasoning","Trigonometric Ratios","Coordinate Geometry","Statistics","Set Theory","Sequences and Series","Mensuration","Probability"],"SSS 2":["Logarithms","Quadratic Expressions and Equations","Simultaneous Equations","Inequalities","Surds and Indices","Circle Geometry","Trigonometry: Graphs and Identities","Statistics: Measures of Dispersion","Permutation and Combination","Coordinates and Straight Lines","Mensuration of Solids","Probability"],"SSS 3":["Revision of Indices and Logarithms","Quadratic Equations and Graphs","Trigonometric Identities","Coordinate Geometry of Straight Lines","Statistics","Mensuration","Probability","Three-Dimensional Problems","Number Systems","Transformation Geometry","Linear Programming","Revision"]},"English Language":{"SSS 1":["Words Associated with Religion","Comprehension: Prose Passages","Tenses","Consonant Sounds","Formal Letter Writing","Vocabulary Development","Concord","Expository Essay","Figures of Speech","Oral English: Vowel Sounds","Summary Writing","Register of Science and Technology"],"SSS 2":["Words Associated with Culture","Comprehension and Summary","Phrases and Clauses","Argumentative Essay","Question Tags","Vowel Contrasts","Letter to the Editor","Direct and Indirect Speech","Registers of Law","Idioms and Proverbs","Article Writing","Punctuation"],"SSS 3":["Revision of Grammar and Usage","Comprehension Practice","Summary Practice","Essay Writing: Narrative, Descriptive, Argumentative","Lexis and Structure","Oral English Practice","Concord and Agreement","Common Errors in English","Formal Correspondence","Figures of Speech Revision","Mock Examination Practice","WAEC Revision"]},"English Studies":{"Primary 5":["Words Associated with Home","Reading Comprehension","Simple Present Tense","Vowel Sounds","Letter Writing","Vocabulary Development","Plurals and Possessives","Descriptive Writing","Punctuation Marks","Oral Reading Practice","Summary Writing","Spelling and Dictation"],"Primary 6":["Vocabulary: Words Associated with the Market","Comprehension","Verbs and Tenses","Consonant Sounds","Informal Letter Writing","Synonyms and Antonyms","Prepositions","Narrative Essay","Punctuation","Summary","Spelling","Revision for Common Entrance"],"JSS 1":["Nouns and Pronouns","Reading Comprehension","Simple Present Tense","Vowel Sounds","Descriptive Essay","Vocabulary: Family and Home","Adjectives","Punctuation","Summary Writing","Oral English","Letter Writing","Register of School"],"JSS 2":["Verbs and Adverbs","Comprehension: Narrative Passages","Present and Past Continuous Tenses","Diphthongs","Expository Essay","Vocabulary: Occupations","Prepositions and Conjunctions","Direct Speech","Summary Writing","Letter Writing","Register of Transport","Idioms"],"JSS 3":["Concord","Comprehension Practice","Future Tenses","Consonant Clusters","Argumentative Essay","Vocabulary: Government and Citizenship","Phrasal Verbs","Indirect Speech","Summary Writing","Formal Letters","Spelling Rules","Revision"]},"Basic Science":{"JSS 1":["Introduction to Science","Living and Non-Living Things","Characteristics of Living Things","Plant and Animal Cells","The Human Body Systems","Matter and Its Properties","Family Health","Environmental Sanitation","Force and Motion","Energy","Renewable and Non-Renewable Resources","Space and the Solar System"],"JSS 2":["Work, Energy and Power","Water and Its Uses","Weather and Climate","Family Life Education","Harmful Substances","Reproduction in Plants","Reproduction in Animals","Elements, Compounds and Mixtures","Atomic Structure","Chemical Symbols and Formulae","Drug Abuse","Environmental Hazards"],"JSS 3":["Environmental Pollution","Adaptation of Living Things","Skeletal System","Excretion and Homeostasis","Reproductive Health","Sexually Transmitted Infections","Chemical Reactions","Acids, Bases and Salts","Electrical Energy","Magnetism","Light Energy","Revision"]},"Biology":{"SSS 1":["Biology as a Science","Characteristics of Living Things","Cell Structure and Organisation","Cell Physiology","Living and Non-Living Things","Classification of Living Things","Nutrition in Plants","Nutrition in Animals","Digestive System","Transport System","Respiratory System","Excretion"],"SSS 2":["Food and Nutrition","Basic Ecological Concepts","Ecological Succession","Biodiversity","Reproductive System","Reproduction in Plants","Reproduction in Animals","Growth and Development","Nervous System","Sense Organs","Endocrine System","Homeostasis"],"SSS 3":["Regulation of Internal Environment","Genetics: Mendelian Inheritance","Chromosomes and Variation","Evolution","Ecosystem and Conservation","Applied Biology","Microbiology","Diseases and Health","Revision: Cell Biology","Revision: Ecology","Revision: Genetics","WAEC Revision"]},"Social Studies":{"Primary 5":["The Family","Our Community","Culture and Tradition","Nigeria as a Nation","Social Groups","Environmental Problems","Health and Safety","Leadership and Followership","Values and Morals","Resources in the Community","Transportation","Revision"],"JSS 1":["Meaning of Social Studies and Society","Family and Marriage","Culture and Social Values","Social Groups and Institutions","The Environment","Resources and Their Uses","Conflict and Conflict Resolution","Social Problems in Nigeria","Citizenship and the Nigerian State","Democracy and Elections","Human Rights","Revision"],"JSS 2":["Family and Community Life","Culture and Identity","Socialisation","The Nigerian Economy","National Symbols","Physical Environment of Nigeria","Climate and Vegetation","Population","Migration","Social Order and Cooperation","Gender and Social Justice","Revision"],"JSS 3":["Social Studies and National Development","Peace and Security","Drug Abuse and Trafficking","Human Trafficking","Health: Communicable Diseases","Environmental Sanitation","Leadership and Accountability","Nigeria and the International Community","Population and Development","Citizenship Education","Revision","Examination Practice"]},"Civic Education":{"SSS 1":["Values and Civic Virtues","Nigerian Constitution and Rule of Law","Human Rights","Citizenship and Duties","Democracy and Its Features","Electoral Process","Government and Its Structures","Rule of Law and Fundamental Rights","National Symbols and Identity","Corruption and Accountability","Civic Responsibilities","Revision"],"SSS 2":["The Nigerian State","Federal and State Governments","The Judiciary","The Legislature","The Executive","Elections and Political Parties","Public Opinion","Pressure Groups","Human Rights Protection","Environment and Civic Responsibility","Peace and Conflict Resolution","Revision"],"JSS 1":["Values in Civic Life","The Family and Society","The Nigerian Nation","Our National Symbols","Citizenship","Rights and Duties","Obedience to Rules","Communalism","Cooperation and Self-Reliance","National Consciousness","Respect for Elders and Authority","Revision"],"JSS 2":["Nigeria as a Federation","Rule of Law","Human Rights and Freedoms","Consumer Rights","Ways of Promoting the Rule of Law","Security Agencies","Public Order and Public Safety","Democracy","Elections","Good Governance","Civic Values","Revision"]},"Government":{"SSS 1":["Basic Concepts in Government","Power and Authority","Legitimacy and Sovereignty","Forms of Government","Political Ideologies","Democracy","Nigerian Constitution","Federalism and Centralisation","Nigerian Political Development","Electoral Systems","Public Administration","Revision"],"SSS 2":["The Legislature","The Executive","The Judiciary","Separation of Powers","Checks and Balances","Nigerian Federalism","Political Parties","Electoral Processes and Reform","Pressure Groups","Public Corporations","Local Government Administration","Revision"]},"Economics":{"SSS 1":["Basic Concepts of Economics","Economic Problems: Scarcity and Choice","Factors of Production","Demand and Supply","Equilibrium Price","Production Theory","Business Organisation","Distribution","Basic Economic Systems","National Income","Money and Banking","Revision"],"SSS 2":["Demand and Supply Elasticity","Theory of Consumer Behaviour","Theory of Production","Cost of Production","Market Structures","National Income Concepts","Inflation and Deflation","Unemployment","International Trade","Balance of Payments","Economic Development Planning","Revision"]},"Literature in English":{"SSS 1":["Introduction to Literature","Genres of Literature","Drama and Its Elements","Poetry and Figurative Language","Prose and Narrative Techniques","Characterisation","Setting and Plot","Themes in African Literature","Drama: Analysis of a Set Text","Poetry: Analysis of a Set Poem","Prose: Analysis of a Set Novel","Revision"],"SSS 2":["Literary Terms and Devices","Drama: Tragic Elements","Comedy and Satire","Poetry: Structure and Form","African and Non-African Poetry","Prose: Point of View","Chinua Achebe: Things Fall Apart","Wole Soyinka: The Lion and the Jewel","African Feminism and Literature","Criticism and Interpretation","Comparative Text Analysis","Revision"]},"Chemistry":{"SSS 1":["Introduction to Chemistry","Laboratory Safety and Apparatus","Matter and Its Properties","Atomic Structure","The Periodic Table","Chemical Bonding","Chemical Equations and Stoichiometry","Acids, Bases and Salts","Gas Laws","Water and Solutions","Qualitative Analysis","Revision"],"SSS 2":["Periodic Trends","Chemical Reactions and Equilibrium","Electrolysis","Oxidation and Reduction","Thermochemistry","Rates of Chemical Reaction","Organic Chemistry: Hydrocarbons","Alkanols and Alkanoic Acids","Soaps and Detergents","Metals and Non-Metals","Quantitative Analysis","Revision"]},"Physics":{"SSS 1":["Introduction to Physics and Measurement","Scalars and Vectors","Motion in a Straight Line","Equations of Motion","Forces and Equilibrium","Work, Energy and Power","Heat Energy and Temperature","Thermal Expansion","Optics: Reflection and Refraction","Electricity: Static Charges","Current Electricity","Revision"],"SSS 2":["Wave Motion","Sound Waves","Light Waves and Interference","Electromagnetic Waves","Electric Fields","Capacitors","Magnetic Fields","Electromagnetic Induction","Simple Machines","Machines and Efficiency","Atomic and Nuclear Physics","Revision"]},"Agricultural Science":{"JSS 1":["Meaning and Importance of Agriculture","Forms of Agricultural Practice","Farm Tools and Their Uses","Soil Formation and Textures","Soil Fertility","Plant Nutrients","Crop Production Practices","Farm Animals and Their Products","Animal Husbandry Practices","Farm Safety","Agro-Allied Industries","Revision"],"SSS 1":["Agricultural Economics: Basic Concepts","Farm Records and Accounts","Factors of Agricultural Production","Land Tenure Systems in Nigeria","Soil Science","Plant Nutrition","Crop Husbandry","Livestock Production","Poultry Management","Farm Mechanisation","Agricultural Extension","Revision"]},"Christian Religious Studies":{"JSS 1":["The Bible as the Word of God","Creation and the Fall","Cain and Abel","Noah and the Covenant","Abraham: The Father of Faith","Isaac and Jacob","Joseph in Egypt","Moses and the Passover","The Ten Commandments","Love for One Another","Obeying God","Revision"],"SSS 1":["God and His Creation","Sovereignty of God","The Love of God for Man","Justification by Faith","Christian Giving","Prayer and Fasting","Faith and Works","The Compassion of Jesus","Jesus and Social Justice","Christian Living in a Modern World","Christian Home","Revision"]},"Business Studies":{"JSS 1":["Introduction to Business Studies","Office and Office Staff","Office Equipment","Business Communication","Trade and Aids to Trade","Banking and Saving","Sources of Capital","Book-keeping: Basic Records","Consumer Rights","Business Ethics","Entrepreneurship","Revision"],"JSS 2":["Business Transaction and Documents","Banking Services","Insurance","Warehousing","Transport in Business","Book-keeping: Double Entry","Ledger and Trial Balance","Petty Cash Book","Business Letters","Sales and Purchases","Entrepreneurship Skills","Revision"]},"Basic Technology":{"JSS 1":["Introduction to Basic Technology","Safety in the Workshop","Materials and Their Properties","Hand Tools and Their Uses","Technical Drawing: Basic Instruments","Woodwork Practice","Metalwork Practice","Building Construction Basics","Simple Machines","Energy and Power","Electrical Components","Revision"],"JSS 2":["Workshop Safety and Measurements","Technical Drawing: Orthographic Projection","Wood Joints","Metalwork: Cutting and Joining","Building Materials","Simple Structures","Mechanisms and Linkages","Electricity: Circuits","Electronics: Components","Maintenance Culture","Appropriate Technology","Revision"]}}};
+
+  /* ---------- helpers ---------- */
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function rich(s) {
+    var out = esc(s == null ? '' : s);
+    out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    var lines = out.split(/\n{2,}/);
+    return lines.map(function (block) {
+      var ls = block.split('\n');
+      var html = ls.map(function (l) {
+        var t = l.trim();
+        if (!t) return '';
+        if (/^[•\-*]\s+/.test(t)) return '<span class="li">• ' + t.replace(/^[•\-*]\s+/, '') + '</span>';
+        if (/^\d+[.)]\s+/.test(t)) return '<span class="li">' + t + '</span>';
+        return '<span class="p">' + t + '</span>';
+      }).join('');
+      return '<div class="blk">' + html + '</div>';
+    }).join('');
+  }
+
+  function subjectFamily(subject) {
+    var s = String(subject || '').toLowerCase();
+    if (/math|further math/.test(s)) return 'maths';
+    if (/english|literature|french|yoruba|language/.test(s)) return 'english';
+    if (/biology|chemistry|physics|science|agricultural|health|basic tech|technical|computer/.test(s)) return 'science';
+    if (/social|civic|government|history|geograph/.test(s)) return 'social';
+    if (/religious|christian|islamic/.test(s)) return 'religious';
+    if (/business|account|commerce|economic/.test(s)) return 'business';
+    return 'general';
+  }
+
+  /* ---------- topic bank ---------- */
+  function normaliseSubject(subject) {
+    var raw = String(subject || '').toLowerCase();
+    var keys = Object.keys(CURR.TOPIC_BANK);
+    for (var i = 0; i < keys.length; i++) {
+      var base = keys[i].toLowerCase();
+      if (raw === base || raw.indexOf(base) !== -1 || base.indexOf(raw.split('(')[0].trim()) !== -1) return keys[i];
+    }
+    return null;
+  }
+
+  function suggestedTopics(className, subject) {
+    var key = normaliseSubject(subject);
+    if (!key) return { source: 'none', topics: [] };
+    var bank = CURR.TOPIC_BANK[key] || {};
+    var rows = bank[className];
+    if (!rows) {
+      var candidates = Object.keys(bank);
+      if (!candidates.length) return { source: 'none', topics: [] };
+      var level = String(className || '').split(' ')[0];
+      var match = candidates.filter(function (c) { return c.indexOf(level) === 0; })[0] || candidates[0];
+      rows = bank[match];
+      return {
+        source: 'suggestion', bankClass: match,
+        notice: 'Suggestions are from the ' + match + ' sequence because no ' + className + ' entries exist in the built-in bank. These are starting points, not an official Ekiti State scheme of work.',
+        topics: (rows || []).map(function (t, i) { return { week: i + 1, topic: t }; })
+      };
+    }
+    return {
+      source: 'suggestion', bankClass: className,
+      notice: 'These are suggested starting points based on the general NERDC sequence used in Nigerian schools. They are not an official Ekiti State scheme of work.',
+      topics: rows.map(function (t, i) { return { week: i + 1, topic: t }; })
+    };
+  }
+
+  /* ---------- note sections ---------- */
+  var SECTIONS = [
+    { id: 'topic', heading: 'Topic', type: 'short' },
+    { id: 'subtopic', heading: 'Sub-topic', type: 'short', optional: true },
+    { id: 'objectives', heading: 'Behavioural Objectives', type: 'list' },
+    { id: 'materials', heading: 'Instructional Materials', type: 'list' },
+    { id: 'previous', heading: 'Previous Knowledge / Entry Behaviour', type: 'text' },
+    { id: 'references', heading: 'Reference Materials', type: 'list' },
+    { id: 'content', heading: 'Content Development', type: 'text' },
+    { id: 'presentation', heading: 'Lesson Presentation', type: 'steps' },
+    { id: 'evaluation', heading: 'Evaluation', type: 'qa' },
+    { id: 'summary', heading: 'Summary / Conclusion', type: 'text' },
+    { id: 'assignment', heading: 'Assignment', type: 'text' },
+    { id: 'remarks', heading: 'Remarks / Reflection', type: 'text', optional: true },
+    { id: 'answerKey', heading: 'Suggested Answers / Marking Guide', type: 'qa', teacherOnly: true }
+  ];
+
+  /* ---------- composition ---------- */
+  function compose(p) {
+    var topic = (p.topic || '').trim() || 'Untitled topic';
+    var topicL = topic.toLowerCase();
+    var cls = p.className || 'the class';
+    var subject = p.subject || 'the subject';
+    var fam = subjectFamily(subject);
+    var count = Math.max(3, Math.min(20, Number(p.evaluationCount) || 6));
+
+    var materials = {
+      maths: ['Chalkboard ruler, metre rule and set square', 'Number cards / flash cards', 'Counters (bottle tops, stones, beans)', 'A chart showing the key formula or method', 'Pupils’ Mathematics textbook'],
+      english: ['A chart of the key words for the week', 'Printed short passage or textbook page', 'Dictionary', 'Flash cards for vocabulary', 'Exercise books'],
+      science: ['Real specimens or models available in school', 'A chart or poster of the process', 'Simple apparatus for the demonstration', 'Safety materials (apron, water, first-aid box)', 'Basic Science textbook'],
+      social: ['A chart/map of Nigeria', 'Pictures from newspapers and magazines', 'A copy of the Nigerian Constitution (extracts)', 'Flash cards of key terms', 'Relevant textbook chapter'],
+      religious: ['A Bible/Qur’an copy', 'A chart of the key names and places', 'Pictures of relevant places/objects', 'Moral story cards', 'Textbook'],
+      business: ['Sample business documents where available', 'Ledger/ruled charts', 'A calculator', 'Flash cards of key terms', 'Business Studies textbook'],
+      general: ['Relevant charts and posters', 'Real objects/samples where available', 'Flash cards of key terms', 'Textbook chapter for the topic', 'Exercise books and chalkboard']
+    }[fam];
+
+    var objectives = {
+      maths: ['state the meaning and key rules of ' + topicL, 'solve worked problems on ' + topicL + ' step by step', 'apply ' + topicL + ' to everyday Nigerian situations involving money, goods or measurements', 'identify and correct common mistakes in ' + topicL],
+      english: ['define and use key words associated with ' + topicL, 'read and identify the main ideas in a passage on ' + topicL, 'construct correct sentences using the language item taught', 'answer comprehension and usage questions accurately'],
+      science: ['define ' + topicL + ' and state its main features', 'describe the process/structure being studied using correct scientific terms', 'give Nigerian examples that illustrate ' + topicL, 'answer objective and short-answer questions on ' + topicL],
+      social: ['explain the meaning of ' + topicL, 'list the types/features of ' + topicL, 'relate ' + topicL + ' to everyday life in the Nigerian community', 'suggest solutions to problems associated with ' + topicL],
+      religious: ['narrate the key events of the lesson on ' + topicL, 'identify the moral lessons from the passage', 'explain how the lesson applies to daily life', 'memorise the key verse or quotation where applicable'],
+      business: ['define ' + topicL + ' and related terms', 'state the importance of ' + topicL + ' in business', 'prepare the document/record required', 'answer practical business questions accurately'],
+      general: ['define ' + topicL, 'list and explain the main points of ' + topicL, 'give relevant examples of ' + topicL, 'apply the knowledge to everyday situations']
+    }[fam];
+
+    var previous = {
+      maths: 'Pupils already count, add, subtract and share objects in everyday life such as sharing oranges, sweets or money at the market. They can also state the value of naira notes and coins.',
+      english: 'Pupils already hold simple conversations in English, read short passages and know basic punctuation. They use words connected with ' + topicL + ' informally at home and in school.',
+      science: 'Pupils have observed ' + topicL + ' in their environment — at home, on the farm or on the way to school — and can describe what they have seen in their own words.',
+      social: 'Pupils live within a community in Ekiti State and have first-hand experience of the issues discussed in ' + topicL + '. They can name people and places around them.',
+      religious: 'Pupils attend worship with their families, know some Bible/Qur’an stories and can recite short verses taught earlier.',
+      business: 'Pupils buy and sell small items, have seen market traders keep records and know that goods move from producers to sellers.',
+      general: 'Pupils have everyday experience of ' + topicL + ' at home, in the market and in the community, and can describe what they have observed.'
+    }[fam];
+
+    var faq = '[LOCAL DRAFT] This note was composed offline by the app because no AI provider is connected. It gives you a complete, correctly ordered scaffold. Replace each bracketed prompt with your own teaching content, or connect an AI provider on the full server version, then regenerate.';
+
+    var contentBlock = faq + '\n\n1. Definition\n• ' + topic + ' means: [Write a one-sentence definition in learner-friendly language.]\n\n2. Key points to explain\n• [Main point 1 — what it is.]\n• [Main point 2 — how it works or is classified.]\n• [Main point 3 — importance or uses in Nigeria.]\n\n3. Nigerian examples\n• [Example 1 — link it to Ado-Ekiti, Ikere, Oye, the market, the farm, the home or the school.]\n• [Example 2 — link it to money, food, transport or family life.]\n\n' +
+      (fam === 'maths'
+        ? '4. Worked example (write every step)\nQuestion: [Insert a question on ' + topic + '.]\nSolution:\nStep 1: [state the given values]\nStep 2: [choose the method/formula]\nStep 3: [substitute and calculate, showing units]\nAnswer: [state the final answer clearly]\n\n5. Common mistakes to correct\n• [e.g. mixing up units, forgetting to simplify, leaving the answer without units.]'
+        : '4. Common mistakes to correct\n• [List 2-3 errors learners make on this topic.]') +
+      (fam === 'english' ? '\n\n6. Language practice\n• [Give a short passage or example sentences on ' + topic + '.]\n• [List 5 key words with their meanings.]' : '');
+
+    var presentation = [
+      { step: 'Step 1: Introduction & revision of previous knowledge', teacher: 'Revise the previous lesson with oral questions. Ask: “What did we discuss last week?” then introduce the day’s topic with a familiar object or situation. Say: “Today we are going to learn about ' + topic + '.”', learner: 'Answer the revision questions, observe the object/situation presented and say what they already know about the topic.', time: '5 minutes' },
+      { step: 'Step 2: Explanation & development', teacher: 'Explain ' + topic + ' step by step using the Content Development above. Write the key points on the board, give the Nigerian examples, and pause after each point to ask a checking question.', learner: 'Listen, take notes, observe charts/objects and answer the checking questions.', time: '15 minutes' },
+      { step: 'Step 3: Demonstration / worked example', teacher: (fam === 'maths' ? 'Solve one worked example on the board, thinking aloud through every step, then solve a second example with the class contributing each step.' : 'Demonstrate the process or give a model example on the board, drawing learners’ attention to each part.'), learner: 'Follow the demonstration and complete each step with the teacher.', time: '10 minutes' },
+      { step: 'Step 4: Guided practice / learner participation', teacher: 'Give a short class exercise in pairs or groups. Move round, note common errors and correct them on the spot.', learner: 'Work in pairs, complete the exercise, compare answers and explain their reasoning to the class.', time: '10 minutes' },
+      { step: 'Step 5: Evaluation', teacher: 'Ask the evaluation questions below, orally first and then as a short written exercise.', learner: 'Answer the questions orally and in writing.', time: '5 minutes' },
+      { step: 'Step 6: Summary & assignment', teacher: 'Summarise the main points on the board and link them to the next lesson. Give the assignment and mark the register.', learner: 'Copy the summary, ask questions and write down the assignment.', time: '5 minutes' }
+    ];
+
+    var evaluation = [];
+    for (var i = 0; i < count; i++) {
+      var q;
+      if (i === 0) q = 'Define ' + topicL + ' in your own words.';
+      else if (i === 1) q = 'State three main points about ' + topicL + '.';
+      else if (i === 2) q = 'Give two relevant examples of ' + topicL + ' from your environment.';
+      else if (i === 3) q = 'Explain why ' + topicL + ' is important in Ekiti State.';
+      else if (i === 4) q = 'Describe how you would apply what you have learnt about ' + topicL + ' in daily life.';
+      else q = '[Write question ' + (i + 1) + ': a short-answer question that tests objective ' + Math.min(i + 1, objectives.length) + '.]';
+      evaluation.push({ question: q, answer: '[Write the expected answer or marking idea for this question.]' });
+    }
+
+    return {
+      topic: topic,
+      subtopic: p.subtopic || ('A focused study of ' + topicL),
+      objectives: objectives,
+      materials: materials,
+      previous: previous,
+      references: [
+        subject + ' textbook approved for ' + cls + ' in Ekiti State schools (the copy used in your school)',
+        subject + ' scheme of work for ' + cls + (p.term ? ', ' + p.term : '') + (p.academicSession ? ', ' + p.academicSession : ''),
+        'Teacher’s own lesson notes and previous class work'
+      ],
+      content: contentBlock,
+      presentation: presentation,
+      evaluation: evaluation,
+      summary: 'In this lesson we learnt about ' + topic + '. The main points were: [list 3-4 points]. This prepares you for the next lesson, [state the next topic from your scheme of work].',
+      assignment: 'Answer these in your exercise book: [3 practice questions on ' + topicL + ']. Show all working where necessary.',
+      remarks: 'Lesson delivered as planned. [Add a short reflection after teaching.]',
+      answerKey: evaluation.map(function (q) { return { question: q.question, answer: q.answer }; })
+    };
+  }
+
+  root.Engine = {
+    CURR: CURR, SECTIONS: SECTIONS, esc: esc, rich: rich,
+    subjectFamily: subjectFamily, suggestedTopics: suggestedTopics,
+    normaliseSubject: normaliseSubject, compose: compose
+  };
+})(typeof window !== 'undefined' ? window : this);
+
+</script>
+<script>
+(function () {
+  'use strict';
+  var E = window.Engine;
+  var CURR = E.CURR;
+  var SECTIONS = E.SECTIONS;
+  var esc = E.esc;
+
+  var STORE_KEY = 'ekiti_notes_v1';
+  var PROFILE_KEY = 'ekiti_profile_v1';
+
+  /* ---------- state ---------- */
+  var state = {
+    view: 'home',
+    notes: [],
+    current: null,
+    form: { schoolType: 'JSS', className: 'JSS 2', subject: 'Basic Science', schoolName: '', teacherName: '', term: 'First Term', week: '1', topic: '', duration: '40', evaluationCount: '6', academicSession: '' },
+    answerOn: true,
+    editing: null
+  };
+
+  /* ---------- storage ---------- */
+  function loadNotes() {
+    try { state.notes = JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+    catch (e) { state.notes = []; }
+    if (!Array.isArray(state.notes)) state.notes = [];
+  }
+  function saveNotes() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state.notes)); } catch (e) { alert('Could not save — your phone storage may be full.'); }
+  }
+  function loadProfile() {
+    try {
+      var p = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
+      if (p) { for (var k in p) if (p[k]) state.form[k] = p[k]; }
+    } catch (e) {}
+  }
+  function saveProfile() {
+    try {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify({
+        schoolName: state.form.schoolName, teacherName: state.form.teacherName,
+        schoolType: state.form.schoolType, className: state.form.className,
+        subject: state.form.subject, academicSession: state.form.academicSession
+      }));
+    } catch (e) {}
+  }
+
+  /* ---------- dom ---------- */
+  function $(sel, rootEl) { return (rootEl || document).querySelector(sel); }
+  function el(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+  function toast(msg, kind) {
+    var t = $('#toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + (kind || '');
+    clearTimeout(t._t);
+    t._t = setTimeout(function () { t.className = 'toast'; }, 2600);
+  }
+
+  /* ---------- render: home ---------- */
+  function viewHome() {
+    var app = $('#app');
+    app.innerHTML = '';
+    var header = el('header', 'head');
+    header.innerHTML =
+      '<div class="brand"><span class="mark">' + shieldSvg() + '</span><div><strong>Ekiti Teachers</strong><small>LESSON NOTE MAKER</small></div></div>';
+    app.appendChild(header);
+
+    var main = el('main', 'pad');
+    main.appendChild(el('div', 'welcome',
+      '<div class="eyebrow">OFFLINE · WORKS WITHOUT INTERNET</div>' +
+      '<h1>Make a complete lesson note</h1>' +
+      '<p>Fill the short form. The app builds the full note — objectives, content, presentation table, evaluation and marking guide. Then edit, save and print.</p>'));
+
+    main.appendChild(el('div', 'notice',
+      '<strong>Honest labelling.</strong> This offline edition writes the correct structure and prompts, not invented teaching content. Every note is marked “Local draft — not AI”. Read and fill it before classroom use.'));
+
+    var btn = el('button', 'btn btn--primary btn--lg', '＋ New lesson note');
+    btn.onclick = function () { state.view = 'form'; render(); };
+    main.appendChild(btn);
+
+    var stats = el('div', 'stats');
+    stats.innerHTML =
+      statBox(state.notes.length, 'Saved notes') +
+      statBox(new Set(state.notes.map(function (n) { return n.subject; })).size, 'Subjects') +
+      statBox(new Set(state.notes.map(function (n) { return n.className; })).size, 'Classes');
+    main.appendChild(stats);
+
+    main.appendChild(el('h2', 'sec-title', 'Saved on this phone'));
+    if (!state.notes.length) {
+      main.appendChild(el('div', 'empty', 'No notes yet. Tap <strong>New lesson note</strong> above to make your first one.'));
+    } else {
+      var list = el('div', 'list');
+      state.notes.slice().reverse().forEach(function (n) {
+        var row = el('div', 'row-item');
+        row.innerHTML =
+          '<div class="ri-main"><div class="ri-title">' + esc(n.topic) + '</div>' +
+          '<div class="ri-sub">' + esc(n.className) + ' · ' + esc(n.subject) + ' · ' + esc(n.term) + ' · Week ' + esc(n.week) + '</div></div>' +
+          '<button class="ri-del" aria-label="Delete">' + trashSvg() + '</button>';
+        row.querySelector('.ri-main').onclick = function () { state.current = n; state.view = 'note'; state.answerOn = true; render(); };
+        row.querySelector('.ri-del').onclick = function (ev) {
+          ev.stopPropagation();
+          if (confirm('Delete “' + n.topic + '”? This cannot be undone.')) {
+            state.notes = state.notes.filter(function (x) { return x.id !== n.id; });
+            saveNotes(); render(); toast('Note deleted');
+          }
+        };
+        list.appendChild(row);
+      });
+      main.appendChild(list);
+    }
+    app.appendChild(main);
+  }
+  function statBox(v, label) {
+    return '<div class="stat"><span class="sv">' + v + '</span><span class="sl">' + label + '</span></div>';
+  }
+
+  /* ---------- render: form ---------- */
+  function options(list, sel) {
+    return list.map(function (o) {
+      var v = typeof o === 'string' ? o : o.value, t = typeof o === 'string' ? o : o.label;
+      return '<option value="' + esc(v) + '"' + (v === sel ? ' selected' : '') + '>' + esc(t) + '</option>';
+    }).join('');
+  }
+
+  function viewForm() {
+    var f = state.form;
+    var app = $('#app');
+    app.innerHTML = '';
+    var header = el('header', 'head head--back');
+    header.innerHTML = '<button class="back">' + backSvg() + ' Back</button><strong>New lesson note</strong>';
+    header.querySelector('.back').onclick = function () { state.view = 'home'; render(); };
+    app.appendChild(header);
+
+    var main = el('main', 'pad');
+    var classes = CURR.CLASSES[f.schoolType] || CURR.CLASSES.JSS;
+    if (classes.indexOf(f.className) === -1) f.className = classes[0];
+    var subjects = CURR.SUBJECTS[f.schoolType] || CURR.SUBJECTS.JSS;
+    if (subjects.indexOf(f.subject) === -1) f.subject = subjects[0];
+
+    main.innerHTML = '<form id="genform" autocomplete="off">' +
+      field('School name', '<input name="schoolName" value="' + esc(f.schoolName) + '" placeholder="e.g. Ekiti Baptist High School, Ikere-Ekiti">') +
+      field('Teacher’s name', '<input name="teacherName" value="' + esc(f.teacherName) + '" placeholder="e.g. Mrs. Folasade Adebayo">') +
+      '<div class="two">' +
+        field('School type', '<select name="schoolType">' + options(['Primary', 'JSS', 'SSS'], f.schoolType) + '</select>') +
+        field('Class', '<select name="className">' + options(classes, f.className) + '</select>') +
+      '</div>' +
+      field('Subject', '<select name="subject">' + options(subjects, f.subject) + '</select>') +
+      '<div class="two">' +
+        field('Term', '<select name="term">' + options(['First Term', 'Second Term', 'Third Term'], f.term) + '</select>') +
+        field('Week', '<select name="week">' + options(Array.from({ length: 14 }, function (_, i) { return String(i + 1); }), f.week) + '</select>') +
+      '</div>' +
+      field('Academic session', '<input name="academicSession" value="' + esc(f.academicSession) + '" placeholder="e.g. 2026/2027">') +
+      '<div id="topicWrap">' + field('Topic *', '<input name="topic" id="topic" value="' + esc(f.topic) + '" placeholder="Type the topic, or pick one below">') + '</div>' +
+      '<div id="suggest"></div>' +
+      '<div class="two">' +
+        field('Duration (minutes)', '<input name="duration" type="number" min="20" max="120" value="' + esc(f.duration) + '">') +
+        field('Evaluation questions', '<input name="evaluationCount" type="number" min="3" max="20" value="' + esc(f.evaluationCount) + '">') +
+      '</div>' +
+      '<button type="submit" class="btn btn--primary btn--lg">Generate lesson note</button>' +
+      '<p class="tiny muted center" style="margin-top:14px">Your details are remembered next time.</p>' +
+      '</form>';
+    app.appendChild(main);
+
+    var form = $('#genform', main);
+    form.addEventListener('change', function (ev) {
+      var n = ev.target.name;
+      if (!n) return;
+      f[n] = ev.target.value;
+      if (n === 'schoolType' || n === 'className' || n === 'subject' || n === 'term' || n === 'week') {
+        if (n === 'schoolType') { render(); return; }
+        refreshSuggest();
+      }
+      saveProfile();
+    });
+    form.addEventListener('input', function (ev) {
+      if (ev.target.name) f[ev.target.name] = ev.target.value;
+    });
+    form.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!f.topic.trim()) { toast('Please type or pick a topic'); $('#topic').focus(); return; }
+      generate();
+    });
+    refreshSuggest();
+  }
+
+  function field(label, control, hint) {
+    return '<label class="field"><span class="fl">' + label + '</span>' + control + (hint ? '<span class="hint">' + hint + '</span>' : '') + '</label>';
+  }
+
+  function refreshSuggest() {
+    var wrap = $('#suggest');
+    if (!wrap) return;
+    var f = state.form;
+    var res = E.suggestedTopics(f.className, f.subject);
+    if (!res.topics.length) {
+      wrap.innerHTML = '<div class="notice notice--blue"><strong>No topic suggestions for this subject.</strong> Type your own topic above — that is perfectly fine.</div>';
+      return;
+    }
+    var current = res.topics.filter(function (t) { return String(t.week) === String(f.week); })[0] || res.topics[0];
+    var html = '<div class="notice notice--gold"><strong>Suggested topics — not an official scheme.</strong> ' + esc(res.notice) + '</div>';
+    html += '<div class="chips">';
+    res.topics.forEach(function (t) {
+      html += '<button type="button" class="chip' + (t.topic === current.topic ? ' chip--on' : '') + '" data-topic="' + esc(t.topic) + '"><span class="wk">Wk ' + t.week + '</span>' + esc(t.topic) + '</button>';
+    });
+    html += '</div>';
+    wrap.innerHTML = html;
+    Array.prototype.forEach.call(wrap.querySelectorAll('.chip'), function (c) {
+      c.onclick = function () {
+        state.form.topic = c.getAttribute('data-topic');
+        $('#topic').value = state.form.topic;
+        Array.prototype.forEach.call(wrap.querySelectorAll('.chip'), function (x) { x.classList.remove('chip--on'); });
+        c.classList.add('chip--on');
+      };
+    });
+  }
+
+  /* ---------- generate ---------- */
+  function generate() {
+    var f = state.form;
+    var content = E.compose(f);
+    var note = {
+      id: 'n' + Date.now(),
+      topic: f.topic.trim(),
+      className: f.className, subject: f.subject, term: f.term, week: f.week,
+      duration: f.duration, periods: '1', session: f.academicSession,
+      schoolName: f.schoolName, teacherName: f.teacherName,
+      date: new Date().toISOString().slice(0, 10),
+      created: Date.now(),
+      content: content
+    };
+    state.notes.push(note);
+    saveNotes();
+    state.current = note;
+    state.view = 'note';
+    state.answerOn = true;
+    render();
+    toast('Lesson note created');
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------- render: note ---------- */
+  function viewNote() {
+    var n = state.current;
+    if (!n) { state.view = 'home'; render(); return; }
+    var c = n.content;
+    var app = $('#app');
+    app.innerHTML = '';
+
+    var header = el('header', 'head head--back');
+    header.innerHTML = '<button class="back">' + backSvg() + ' Back</button><strong class="trunc">' + esc(n.topic) + '</strong>';
+    header.querySelector('.back').onclick = function () { state.view = 'home'; render(); };
+    app.appendChild(header);
+
+    var bar = el('div', 'actionbar');
+    bar.innerHTML =
+      '<button class="ab" id="abEdit">' + pencilSvg() + ' Edit</button>' +
+      '<button class="ab" id="abPrint">' + printSvg() + ' Print</button>' +
+      '<button class="ab" id="abWord">' + downloadSvg() + ' Word</button>' +
+      '<button class="ab' + (state.answerOn ? ' ab--on' : '') + '" id="abAns">' + eyeSvg() + ' Answers</button>';
+    app.appendChild(bar);
+
+    var main = el('main', 'pad');
+    main.appendChild(el('div', 'draftflag', '⚠ Local draft — not AI generated. Fill the bracketed prompts before classroom or inspection use.'));
+
+    var paper = el('div', 'paper');
+    var html = '<div class="letterhead">' + esc(n.schoolName || 'Your school name') + '</div><div class="lh-sub">LESSON NOTE</div>';
+    html += '<div class="metagrid">' +
+      meta('Class', n.className) + meta('Subject', n.subject) +
+      meta('Term', n.term) + meta('Week', 'Week ' + n.week) +
+      meta('Date', n.date) + meta('Duration', n.duration + ' minutes') +
+      meta('Teacher', n.teacherName || '—') + meta('Session', n.session || '—') +
+      '</div>';
+
+    SECTIONS.forEach(function (s) {
+      if (s.teacherOnly && !state.answerOn) return;
+      html += '<section class="sec" data-id="' + s.id + '">' +
+        '<h3 class="sec-h"><span>' + s.heading.toUpperCase() + '</span>' + (s.teacherOnly ? '<em class="tag">TEACHER ONLY</em>' : '') + '</h3>' +
+        '<div class="sec-b">' + renderSection(s, c[s.id]) + '</div></section>';
+    });
+    html += '<div class="foot">Prepared with the Ekiti Teachers Lesson Note Maker · Verify curriculum details against the approved Ekiti State / school documents before inspection.</div>';
+    paper.innerHTML = html;
+    main.appendChild(paper);
+
+    var actions = el('div', 'bottom-actions');
+    actions.innerHTML = '<button class="btn btn--ghost" id="dupBtn">Duplicate note</button><button class="btn btn--danger-ghost" id="delBtn">Delete</button>';
+    main.appendChild(actions);
+    app.appendChild(main);
+
+    $('#abPrint', bar).onclick = function () { window.print(); };
+    $('#abWord', bar).onclick = function () { downloadWord(n); };
+    $('#abEdit', bar).onclick = function () { state.view = 'edit'; state.editing = null; render(); };
+    $('#abAns', bar).onclick = function () { state.answerOn = !state.answerOn; render(); };
+    $('#dupBtn', main).onclick = function () {
+      var copy = JSON.parse(JSON.stringify(n));
+      copy.id = 'n' + Date.now();
+      copy.topic = n.topic + ' (copy)';
+      copy.created = Date.now();
+      state.notes.push(copy); saveNotes(); state.current = copy; render(); toast('Duplicated');
+    };
+    $('#delBtn', main).onclick = function () {
+      if (!confirm('Delete this note?')) return;
+      state.notes = state.notes.filter(function (x) { return x.id !== n.id; });
+      saveNotes(); state.current = null; state.view = 'home'; render(); toast('Deleted');
+    };
+  }
+
+  function meta(k, v) {
+    return '<div class="mg"><span class="mgk">' + k + '</span><span class="mgv">' + esc(v) + '</span></div>';
+  }
+
+  function renderSection(s, val) {
+    if (s.type === 'steps') {
+      var rows = Array.isArray(val) ? val : [];
+      if (!rows.length) return '<p class="emptysec">No steps yet.</p>';
+      return '<div class="steps">' + rows.map(function (r, i) {
+        return '<div class="step">' +
+          '<div class="step-h"><span class="step-n">' + (i + 1) + '</span><span class="step-t">' + esc(r.step || ('Step ' + (i + 1))) + '</span>' +
+          (r.time ? '<span class="step-time">' + esc(r.time) + '</span>' : '') + '</div>' +
+          '<div class="step-b"><div class="lbl">TEACHER’S ACTIVITIES</div><div>' + E.rich(r.teacher || '—') + '</div></div>' +
+          '<div class="step-b"><div class="lbl">LEARNERS’ ACTIVITIES</div><div>' + E.rich(r.learner || '—') + '</div></div>' +
+          '</div>';
+      }).join('') + '</div>';
+    }
+    if (s.type === 'qa') {
+      var qs = Array.isArray(val) ? val : [];
+      if (!qs.length) return '<p class="emptysec">No questions yet.</p>';
+      return '<div class="qas">' + qs.map(function (r, i) {
+        var showA = s.teacherOnly || !hasKey();
+        return '<div class="qa"><div class="q"><strong>' + (i + 1) + '.</strong> ' + esc(r.question) + '</div>' +
+          (showA && r.answer ? '<div class="a"><em>Answer / marking guide:</em> ' + esc(r.answer) + '</div>' : '') + '</div>';
+      }).join('') + '</div>';
+    }
+    if (s.type === 'list') {
+      var ls = Array.isArray(val) ? val : [];
+      if (!ls.length) return '<p class="emptysec">Nothing listed.</p>';
+      return '<ol class="ol">' + ls.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
+    }
+    var t = typeof val === 'string' ? val : '';
+    if (!t.trim()) return '<p class="emptysec">Empty.</p>';
+    return E.rich(t);
+  }
+  function hasKey() { return state.answerOn; }
+
+  /* ---------- render: edit ---------- */
+  function viewEdit() {
+    var n = state.current;
+    var c = n.content;
+    var app = $('#app');
+    app.innerHTML = '';
+    var header = el('header', 'head head--back');
+    header.innerHTML = '<button class="back">' + backSvg() + ' Done</button><strong>Edit note</strong>';
+    header.querySelector('.back').onclick = function () { state.view = 'note'; render(); toast('Changes saved'); };
+    app.appendChild(header);
+
+    var main = el('main', 'pad');
+    main.appendChild(el('div', 'notice notice--blue', '<strong>Editing.</strong> Tap any section to change the words. Changes save on this phone automatically.'));
+
+    SECTIONS.forEach(function (s) {
+      var val = c[s.id];
+      var box = el('div', 'edsec');
+      var label = '<div class="edsec-h">' + s.heading + (s.teacherOnly ? ' <em class="tag">TEACHER ONLY</em>' : '') + '</div>';
+      var body = '';
+      if (s.type === 'steps') {
+        body = (Array.isArray(val) ? val : []).map(function (r, i) {
+          return '<div class="edstep"><div class="edstep-h">Step ' + (i + 1) + '</div>' +
+            '<input data-k="step" data-i="' + i + '" value="' + esc(r.step) + '" placeholder="Step / stage">' +
+            '<textarea data-k="teacher" data-i="' + i + '" rows="3" placeholder="Teacher’s activities">' + esc(r.teacher) + '</textarea>' +
+            '<textarea data-k="learner" data-i="' + i + '" rows="2" placeholder="Learners’ activities">' + esc(r.learner) + '</textarea>' +
+            '<input data-k="time" data-i="' + i + '" value="' + esc(r.time) + '" placeholder="Time">' +
+            '</div>';
+        }).join('');
+      } else if (s.type === 'qa') {
+        body = (Array.isArray(val) ? val : []).map(function (r, i) {
+          return '<div class="edstep"><input data-k="question" data-i="' + i + '" value="' + esc(r.question) + '" placeholder="Question ' + (i + 1) + '">' +
+            '<textarea data-k="answer" data-i="' + i + '" rows="2" placeholder="Answer / marking guide">' + esc(r.answer) + '</textarea></div>';
+        }).join('');
+      } else if (s.type === 'list') {
+        body = '<textarea data-k="list" rows="' + Math.min(10, Math.max(3, (Array.isArray(val) ? val.length : 0) + 1)) + '" placeholder="One item per line">' + esc((Array.isArray(val) ? val : []).join('\n')) + '</textarea>';
+      } else if (s.type === 'short') {
+        body = '<input data-k="text" value="' + esc(val) + '">';
+      } else {
+        body = '<textarea data-k="text" rows="' + Math.min(14, Math.max(4, String(val || '').split('\n').length + 1)) + '">' + esc(val) + '</textarea>';
+      }
+      box.innerHTML = label + body;
+      box.dataset.sid = s.id;
+      box.dataset.type = s.type;
+      main.appendChild(box);
+    });
+
+    main.addEventListener('input', function (ev) {
+      var t = ev.target;
+      var box = t.closest('.edsec');
+      if (!box) return;
+      var sid = box.dataset.sid, type = box.dataset.type;
+      var k = t.dataset.k, i = Number(t.dataset.i);
+      if (type === 'steps' || type === 'qa') {
+        var arr = c[sid] && c[sid].length ? c[sid] : [];
+        while (arr.length <= i) arr.push(type === 'steps' ? { step: '', teacher: '', learner: '', time: '' } : { question: '', answer: '' });
+        arr[i][k] = t.value;
+        c[sid] = arr;
+      } else if (type === 'list') {
+        c[sid] = t.value.split('\n').map(function (x) { return x.trim(); }).filter(Boolean);
+      } else {
+        c[sid] = t.value;
+      }
+      persistCurrent();
+    });
+    app.appendChild(main);
+  }
+
+  function persistCurrent() {
+    var n = state.current;
+    if (!n) return;
+    var i = state.notes.findIndex(function (x) { return x.id === n.id; });
+    if (i !== -1) { state.notes[i] = n; saveNotes(); }
+  }
+
+  /* ---------- export ---------- */
+  function downloadWord(n) {
+    var c = n.content;
+    var body = '';
+    body += '<h1 style="text-align:center;font-size:16pt;margin:0">' + esc(n.schoolName || 'Lesson Note') + '</h1>';
+    body += '<p style="text-align:center;font-size:10pt;letter-spacing:.2em;margin:2pt 0 14pt">LESSON NOTE</p>';
+    body += '<table style="width:100%;border-collapse:collapse;font-size:9.5pt;border:1px solid #999">' +
+      '<tr><td style="border:1px solid #999;padding:4pt"><b>Class:</b> ' + esc(n.className) + '</td><td style="border:1px solid #999;padding:4pt"><b>Subject:</b> ' + esc(n.subject) + '</td></tr>' +
+      '<tr><td style="border:1px solid #999;padding:4pt"><b>Term:</b> ' + esc(n.term) + '</td><td style="border:1px solid #999;padding:4pt"><b>Week:</b> ' + esc(n.week) + '</td></tr>' +
+      '<tr><td style="border:1px solid #999;padding:4pt"><b>Date:</b> ' + esc(n.date) + '</td><td style="border:1px solid #999;padding:4pt"><b>Duration:</b> ' + esc(n.duration) + ' minutes</td></tr>' +
+      '<tr><td style="border:1px solid #999;padding:4pt"><b>Teacher:</b> ' + esc(n.teacherName || '—') + '</td><td style="border:1px solid #999;padding:4pt"><b>Session:</b> ' + esc(n.session || '—') + '</td></tr>' +
+      '</table>';
+    body += '<p style="font-size:8pt;color:#7a5f14;background:#fdf8ea;border:1px solid #ecdcae;padding:6pt;margin:10pt 0">LOCAL DRAFT — not AI generated. Fill the bracketed prompts before classroom or inspection use.</p>';
+
+    SECTIONS.forEach(function (s) {
+      if (s.teacherOnly) return;
+      var val = c[s.id];
+      body += '<h2 style="font-size:11pt;text-transform:uppercase;letter-spacing:.08em;color:#0b3d28;border-bottom:1.5pt solid #0b3d28;padding-bottom:2pt;margin:16pt 0 6pt">' + esc(s.heading) + '</h2>';
+      if (s.type === 'steps') {
+        body += '<table style="width:100%;border-collapse:collapse;font-size:9pt">' +
+          '<tr><th style="border:1px solid #999;background:#0b3d28;color:#fff;padding:4pt;text-align:left">Step / Stage</th>' +
+          '<th style="border:1px solid #999;background:#0b3d28;color:#fff;padding:4pt;text-align:left">Teacher’s activities</th>' +
+          '<th style="border:1px solid #999;background:#0b3d28;color:#fff;padding:4pt;text-align:left">Learners’ activities</th>' +
+          '<th style="border:1px solid #999;background:#0b3d28;color:#fff;padding:4pt;text-align:left">Time</th></tr>';
+        (Array.isArray(val) ? val : []).forEach(function (r) {
+          body += '<tr><td style="border:1px solid #999;padding:4pt;vertical-align:top"><b>' + esc(r.step) + '</b></td>' +
+            '<td style="border:1px solid #999;padding:4pt;vertical-align:top">' + esc(r.teacher) + '</td>' +
+            '<td style="border:1px solid #999;padding:4pt;vertical-align:top">' + esc(r.learner) + '</td>' +
+            '<td style="border:1px solid #999;padding:4pt;vertical-align:top">' + esc(r.time) + '</td></tr>';
+        });
+        body += '</table>';
+      } else if (s.type === 'qa') {
+        (Array.isArray(val) ? val : []).forEach(function (r, i) {
+          body += '<p style="margin:4pt 0"><b>' + (i + 1) + '.</b> ' + esc(r.question) + '</p>';
+        });
+      } else if (s.type === 'list') {
+        body += '<ol style="margin:4pt 0 4pt 16pt">' + (Array.isArray(val) ? val : []).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
+      } else {
+        body += '<p style="margin:4pt 0;white-space:pre-wrap">' + esc(val) + '</p>';
+      }
+    });
+
+    body += '<h2 style="font-size:11pt;text-transform:uppercase;letter-spacing:.08em;color:#0b3d28;border-bottom:1.5pt solid #0b3d28;padding-bottom:2pt;margin:16pt 0 6pt">Suggested Answers / Marking Guide (teacher only)</h2>';
+    (c.answerKey || []).forEach(function (r, i) {
+      body += '<p style="margin:4pt 0"><b>' + (i + 1) + '.</b> ' + esc(r.question) + '<br><i>Answer:</i> ' + esc(r.answer) + '</p>';
+    });
+    body += '<p style="font-size:7.5pt;color:#777;margin-top:16pt;border-top:1px solid #ccc;padding-top:4pt">Prepared with the Ekiti Teachers Lesson Note Maker · Verify against approved Ekiti State / school documents before inspection.</p>';
+
+    var html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
+      '<head><meta charset="utf-8"><title>' + esc(n.topic) + '</title>' +
+      '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->' +
+      '<style>@page{size:A4;margin:1.6cm}body{font-family:"Times New Roman",serif;font-size:10.5pt;color:#111}table{page-break-inside:avoid}</style></head><body>' + body + '</body></html>';
+
+    var blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = safeName(n.topic) + '.doc';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1500);
+    toast('Saved as Word document');
+  }
+
+  function safeName(s) {
+    return String(s || 'lesson-note').replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').slice(0, 60) || 'lesson-note';
+  }
+
+  /* ---------- icons ---------- */
+  function shieldSvg() { return '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#e8c877" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.2-2.9 7.4-7 9-4.1-1.6-7-4.8-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>'; }
+  function backSvg() { return '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>'; }
+  function pencilSvg() { return '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>'; }
+  function printSvg() { return '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>'; }
+  function downloadSvg() { return '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>'; }
+  function eyeSvg() { return '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>'; }
+  function trashSvg() { return '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>'; }
+
+  /* ---------- boot ---------- */
+  function render() {
+    if (state.view === 'home') viewHome();
+    else if (state.view === 'form') viewForm();
+    else if (state.view === 'note') viewNote();
+    else if (state.view === 'edit') viewEdit();
+    window.scrollTo(0, 0);
+  }
+
+  loadNotes();
+  loadProfile();
+  if (!state.form.topic) state.form.topic = '';
+  render();
+
+  window.addEventListener('beforeunload', function (e) {
+    if (state.view === 'edit') { e.preventDefault(); e.returnValue = ''; }
+  });
+})();
+
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a59329d65d79ab46',t:'MTc5NDQ2MTYyMg=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a59329d65d79ab46',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
